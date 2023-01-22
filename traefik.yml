@@ -1,0 +1,62 @@
+################################################################
+#
+# Configuration for Traefik v2.
+#
+################################################################
+
+################################################################
+# Global configuration
+################################################################
+#global:
+#  checkNewVersion: true
+#  sendAnonymousUsage: true
+
+################################################################
+# EntryPoints configuration
+################################################################
+
+entryPoints:
+  http:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+
+  https:
+    address: :443
+
+################################################################
+# API and dashboard configuration
+################################################################
+
+api:
+  dashboard: true
+
+################################################################
+# Docker configuration backend
+################################################################
+
+providers:
+  docker:
+    network: traefik-proxy
+    exposedByDefault: false
+    watch: true
+
+  file:
+    filename: traefik_dynamic.yml
+    watch: true
+
+################################################################
+# Resolvers
+################################################################
+
+certificatesResolvers:
+  le:
+    acme:
+      email: le@longbowou.com
+      storage: acme.json
+      tlsChallenge: { }
+      httpChallenge:
+        entryPoint: http
